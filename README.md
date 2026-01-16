@@ -1,4 +1,4 @@
-# mini-RAG-Professional-LLM-Application-Development
+# mini-RAG: Professional LLM Application Development
 ![image alt](https://github.com/ahmedwagdy-ai/mini-RAG-Professional-LLM-Application-Development/blob/7ae945f5ad3bf343bb7c7f5ebd73ab6685f51968/RAG.jpg)
 
 ## 📌 About the Project (Video 01)
@@ -249,7 +249,6 @@ For Windows users, using **WSL** is a professional standard.
 ---
 
 ## IV. Git Branching & Project Cleanup
-"Peace be upon you (سلام عليكم). Since we finished setup, let's start coding."
 
 ### 1. Branching Strategy
 We never work directly on the `main` branch. Every tutorial happens on a new **Branch** to preserve the code.
@@ -280,6 +279,7 @@ This file lists ALL packages needed for the project in one place.
 * **FastAPI (0.115.0):** The most famous web framework for Python. It enforces standard code structure and better longevity.
 * **Uvicorn (0.30.6):** An **ASGI server**. FastAPI needs it to send requests and get responses.
     * *Production Note:* For the cloud, we might later use Gunicorn or Nginx.
+* **python-multipart:** is an essential dependency for FastAPI to parse and process `multipart/form-data`, which is required for handling HTML Form submissions and File Uploads.**    
 
 ### The Rule of Pinned Versions
 **Never** write a package without a version. 
@@ -310,3 +310,358 @@ In your WSL Terminal, run:
 - [x] requirements.txt (Pinned FastAPI & Uvicorn).
 - [x] assets/ folder with .gitkeep.
 - [x] .env.example for configuration management.
+
+
+# 📑 Welcome to FastAPI (Video 05) 
+
+## 1. Series & Project Overview
+
+
+### What is RAG?
+
+**RAG = Retrieval + Generation**
+
+Instead of letting an LLM (like GPT) answer questions from its own memory only, we:
+
+1. **Retrieve** relevant information from documents (PDFs, text, DB, etc.)
+2. **Augment** the prompt with that retrieved data
+3. **Generate** an answer using an LLM
+
+This approach is:
+* More accurate
+* Less hallucination
+* Suitable for private/company documents
+
+---
+## 3. Repository & Branch Strategy
+
+Repository:
+
+```
+https://github.com/bakrianoo/mini-rag
+```
+
+Each tutorial lives in its own **Git branch**:
+
+* `tutorial-001` → basic setup
+* `tutorial-002` → FastAPI introduction (this tutorial)
+
+### Why branches?
+
+* Clean history
+* Each tutorial is isolated
+* Easy rollback
+* Easy learning
+
+### Create a New Branch
+
+Conceptually equivalent to:
+
+```bash
+git checkout -b tutorial-002 tutorial-001
+```
+
+This creates a new branch **based on the previous tutorial**.
+
+---
+
+## 4. Environment Setup (.env)
+
+Before writing any code:
+
+1. Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+2. `.env` contains:
+
+* API keys
+* Secrets
+* Environment variables
+
+### Important
+
+* `.env` is **ignored by Git**
+* Never commit secrets
+
+---
+
+## 5. main.py – Application Entry Point
+
+We now create:
+
+```
+main.py
+```
+
+### What is `main.py`?
+
+It is:
+
+* The **entry point** of the backend
+* The **gateway** of the application
+* Where FastAPI starts
+
+Every request enters through this file.
+
+---
+
+## 6. FastAPI Basics
+
+### What is FastAPI?
+
+FastAPI is:
+
+* A modern Python web framework
+* Used to build APIs
+* Very fast (Starlette + ASGI)
+* Type‑safe (Pydantic)
+
+### Key idea
+
+> Take a **normal Python function** and expose it as an **HTTP API**.
+
+---
+
+## 7. Creating the FastAPI App
+
+First, import FastAPI:
+
+```python
+from fastapi import FastAPI
+```
+
+Then create the application object:
+
+```python
+app = FastAPI()
+```
+
+### What is `app`?
+
+* An **ASGI application object**
+* Handles routing, middleware, docs, validation
+
+Everything in FastAPI hangs off this object.
+
+---
+
+## 8. Your First API Endpoint
+
+### Step 1: Write a normal function
+
+```python
+def welcome():
+    return {"msg": "Hello World"}
+```
+
+This function:
+
+* Takes no arguments
+* Returns a Python dictionary
+
+FastAPI automatically converts it to **JSON**.
+
+---
+
+## 9. Turning a Function into an API (Decorator)
+
+To expose the function as an API:
+
+```python
+@app.get("/welcome")
+def welcome():
+    return {"msg": "Hello World"}
+```
+
+### What does this do?
+
+* `@app.get("/welcome")`
+* Registers this function as a **GET endpoint**
+* URL path: `/welcome`
+
+### HTTP Method
+
+* `GET` → read data
+* Other methods exist:
+
+  * POST (create)
+  * PUT (update)
+  * DELETE (remove)
+
+---
+
+## 10. Running the Server (Uvicorn)
+
+FastAPI does NOT run itself.
+
+We need an **ASGI server**.
+
+### Uvicorn
+
+* Lightweight ASGI server
+* Async‑friendly
+* Production‑ready
+
+### Run Command
+
+```bash
+uvicorn main:app --reload
+```
+
+Meaning:
+
+| Part       | Explanation                            |
+| ---------- | -------------------------------------- |
+| `main`     | Python file (main.py)                  |
+| `app`      | FastAPI object                         |
+| `--reload` | Auto‑restart on code change (DEV only) |
+
+---
+
+## 11. Testing in Browser
+
+Once running, open:
+
+```
+http://localhost:8000
+```
+
+Then:
+
+```
+http://localhost:8000/welcome
+```
+
+Response:
+
+```json
+{"msg": "Hello World"}
+```
+
+You just created your **first API** 🎉
+
+---
+
+## 12. Automatic API Documentation (Swagger)
+
+FastAPI auto‑generates OpenAPI docs.
+
+### Swagger UI
+
+Open:
+
+```
+http://localhost:8000/docs
+```
+
+You get:
+
+* Endpoint list
+* Parameters
+* Try‑it‑out buttons
+* Live execution
+
+This is **zero‑config**.
+
+---
+
+## 13. Testing with Postman
+
+Some developers prefer Postman over Swagger.
+
+### What is Postman?
+
+* API testing client
+* Supports collections
+* Environment variables
+* Sharing
+
+### Steps
+
+1. Create a **new collection**
+2. Set base URL:
+
+```
+http://localhost:8000
+```
+
+3. Save it as a variable:
+
+```
+{{base_url}}
+```
+
+4. Create request:
+
+```
+GET {{base_url}}/welcome
+```
+
+5. Send → receive response
+
+---
+
+## 14. Exporting Postman Collection
+
+Postman allows exporting collections as JSON.
+
+Why?
+
+* Share with team
+* Documentation
+* Easy onboarding
+
+Exported to:
+
+```
+assets/postman-collection.json
+```
+
+This is optional but very professional.
+
+---
+
+## 15. Production‑Ready Uvicorn Flags
+
+### Reload (DEV only)
+
+```bash
+--reload
+```
+
+* Watches files
+* Auto‑restart
+* ❌ Not for production
+
+### Expose to Network
+
+```bash
+--host 0.0.0.0
+```
+
+* Allows external access
+* Required on servers
+
+### Custom Port
+
+```bash
+--port 5000
+```
+
+### Full Command Example
+
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 5000
+```
+At this stage, we have:
+
+✅ FastAPI installed
+✅ First API endpoint
+✅ Running ASGI server
+✅ Swagger documentation
+✅ Postman collection
+✅ Production‑aware commands
+
