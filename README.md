@@ -1,4 +1,5 @@
 # mini-RAG-Professional-LLM-Application-Development
+![image alt](https://github.com/ahmedwagdy-ai/mini-RAG-Professional-LLM-Application-Development/blob/7ae945f5ad3bf343bb7c7f5ebd73ab6685f51968/RAG.jpg)
 
 ## 📌 About the Project (Video 01)
 **mini-RAG** is a practical educational series designed to bridge the gap between "Experimental Data Science" (Jupyter Notebooks) and "Production-ready Software Engineering." 
